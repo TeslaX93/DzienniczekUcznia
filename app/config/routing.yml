@@ -1,0 +1,13 @@
+student:
+    resource: "@StudentBundle/Controller/"
+    type:     annotation
+    prefix:   /student
+
+calendar:
+    resource: "@CalendarBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation
