@@ -3,6 +3,8 @@
 namespace StudentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 
 /**
  * StudentStatus
@@ -22,11 +24,10 @@ class StudentStatus
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_student", type="integer")
+     * @ManyToOne(targetEntity="Student")
+     * @JoinColumn(name="student_id", referencedColumnName="id")
      */
-    private $idStudent;
+    private $studentId;
 
     /**
      * @var \DateTime
@@ -54,27 +55,27 @@ class StudentStatus
     }
 
     /**
-     * Set idStudent
+     * Set studentId
      *
-     * @param integer $idStudent
+     * @param integer $studentId
      *
      * @return StudentStatus
      */
-    public function setIdStudent($idStudent)
+    public function setIdStudent($studentId)
     {
-        $this->idStudent = $idStudent;
+        $this->studentId = $studentId;
 
         return $this;
     }
 
     /**
-     * Get idStudent
+     * Get studentId
      *
      * @return int
      */
     public function getIdStudent()
     {
-        return $this->idStudent;
+        return $this->studentId;
     }
 
     /**

@@ -10,4 +10,14 @@ namespace StudentBundle\Repository;
  */
 class StudentRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getStudentsNumber() {
+        $repo = $this->getEntityManager()->getRepository('StudentBundle:Student');
+        $qb = $repo->createQueryBuilder('q');
+        return $qb->select('count(q.id)')->getQuery()->getSingleScalarResult();
+    }
 }
