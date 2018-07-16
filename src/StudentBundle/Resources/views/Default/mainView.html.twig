@@ -1,0 +1,31 @@
+{% set currentMonthYear %}{{ app.request.get('year') }}-{{ app.request.get('month') }}{% endset %}
+{% set daysInMonth=currentMonthYear|date("t") %}
+<div id="navbar">
+    <div id="previousMonth">
+        <a href="{{ path('mainView',{'year': currentMonthYear|date_modify("-1 month")|date("Y"),'month':currentMonthYear|date_modify("-1 month")|date("n")}) }}">Poprzedni miesiąc</a>
+    </div>
+    <div id="currentMonth">
+        <b>{{ currentMonthYear|date("m / Y (M)") }}</b>
+    </div>
+    <div id="nextMonth">
+        <a href="{{ path('mainView',{'year': currentMonthYear|date_modify("+1 month")|date("Y") ,'month': currentMonthYear|date_modify("+1 month")|date("n")}) }}">Następny miesiąc</a>
+    </div>
+</div>
+<div id="content">
+    <table>
+        <tr>
+            <td>Nazwisko i imię</td>
+            {% for d in 1..daysInMonth %}
+            <td>{{ d }}</td>
+            {% endfor %}
+        </tr>
+        {% for student in students %}
+            <tr>
+                <td>{{ student.surname }} {{ student.name }}</td>
+                {% for d in 1..daysInMonth %}
+                    <td>X</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</div>
