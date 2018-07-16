@@ -10,4 +10,23 @@ namespace StudentBundle\Repository;
  */
 class StudentStatusRepository extends \Doctrine\ORM\EntityRepository
 {
+//    public function getByMonth($month = null,$year = null)
+//    {
+//        if ($month === null) {
+//            $month = (int) date('m');
+//        }
+//
+//        if ($year === null) {
+//            $year = (int) date('Y');
+//        }
+//        $startDate = new \DateTime("$year-$month-01");
+//        $endDate = (clone $startDate)->modify('last day of this month')->setTime(23, 59, 59);
+//        dump($endDate);
+//        $qb = $this->createQueryBuilder('object');
+//        $qb->where('object.eventDate BETWEEN :start AND :end');
+//        $qb->setParameter('start', $startDate->format('‌​Y-m-d'));
+//        $qb->setParameter('end', $endDate->format('‌​Y-m-d'));
+//
+//        return $qb->getQuery()->getResult();
+//    }
 }
