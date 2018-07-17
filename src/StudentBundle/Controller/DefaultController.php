@@ -71,12 +71,14 @@ class DefaultController extends Controller
         $availableStatus = [' ','O','N','S'];
 
         $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository('StudentBundle:StudentStatus');
-        $studentStatus = $repo->findOneBy(['studentId' => $student, 'eventDate' => new \DateTime($date)]);
+        $ss = $em->getRepository('StudentBundle:StudentStatus');
+        $st = $em->getRepository('StudentBundle:Student')->findOneBy(['id'=>$student]);
+        if(!$st) {throw $this->createNotFoundException("Nie znaleziono ucznia o podanym ID");}
+        $studentStatus = $ss->findOneBy(['studentId' => $st, 'eventDate' => new \DateTime($date)]);
         if (!$studentStatus) {
             $studentStatus = new StudentStatus();
             $studentStatus->setEventDate(new \DateTime($date));
-            $studentStatus->setIdStudent($student);
+            $studentStatus->setIdStudent($st);
             $studentStatus->setStatus($availableStatus[1]);
         } else {
             $currentStatus = $studentStatus->getStatus();

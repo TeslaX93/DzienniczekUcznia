@@ -55,18 +55,22 @@
             <tr>
                 <td>{{ student.surname }} {{ student.name }}</td>
                 {% for d in 1..daysInMonth %}
+                    {% set emptyCell = 1 %}
                     {% for ss in studentStatus %}
                         {% if (student.id == ss.idstudent.id) and (ss.eventDate|date('Y-m-d') == (currentMonthYear ~ '-' ~ d)|date('Y-m-d')) %}
+                            {% set emptyCell = 0 %}
                             <td>
-                                <a href="{{ path('changeStatus',{'student':student.id,'date':ss.eventDate|date('Y-m-d')}) }}">{{ ss.status }}</a>
-                            </td>
-                        {% else %}
-                            <td>
-                                <a href="{{ path('changeStatus',{'student':student.id,'date':(currentMonthYear ~ '-' ~ d)|date('Y-m-d')}) }}">&nbsp;</a>
+                                <a href="{{ path('changeStatus',{'student':student.id,'date':(currentMonthYear ~ '-' ~ d)|date('Y-m-d')}) }}">
+                                    {{ ss.status }}
+                                </a>
                             </td>
                         {% endif %}
                     {% endfor %}
-                    {#<td>X</td>#}
+                    {% if emptyCell == 1 %}
+                        <td>
+                            <a href="{{ path('changeStatus',{'student':student.id,'date':(currentMonthYear ~ '-' ~ d)|date('Y-m-d')}) }}">&nbsp;</a>
+                        </td>
+                    {% endif %}
                 {% endfor %}
             </tr>
         {% endfor %}
