@@ -1,84 +1,55 @@
 {% extends 'base.html.twig' %}
 {% block title %}DzienniczekUcznia{% endblock %}
 {% block stylesheets %}
-<style type="text/css">
-    td a {
-        display: block;
-        width: 100%;
-        text-decoration: none;
-        color: #000;
-    }
-
-    td {
-        border: 1px solid black;
-        width: 24pt;
-        text-align: center;
-    }
-
-    table {
-        width: 100%;
-    }
-
-    #previousMonth {
-        text-align: left;
-    }
-
-    #nextMonth {
-        text-align: right;
-    }
-
-    #currentMonth {
-        text-align: center;
-    }
-</style>
+    <link rel="stylesheet" href="{{ asset('assets/base.css') }}"/>
 {% endblock %}
 {% block body %}
-{% set currentMonthYear %}{{ app.request.get('year') }}-{{ app.request.get('month') }}{% endset %}
-{% set daysInMonth=currentMonthYear|date("t") %}
-<div id="navbar">
-    <div id="previousMonth">
-        <a href="{{ path('mainView',{'year': currentMonthYear|date_modify("-1 month")|date("Y"),'month':currentMonthYear|date_modify("-1 month")|date("n")}) }}">Poprzedni
-            miesiąc</a>
+    {% set currentMonthYear %}{{ app.request.get('year') }}-{{ app.request.get('month') }}{% endset %}
+    {% set daysInMonth=currentMonthYear|date("t") %}
+    <div id="navbar">
+        <div id="previousMonth">
+            <a href="{{ path('mainView',{'year': currentMonthYear|date_modify("-1 month")|date("Y"),'month':currentMonthYear|date_modify("-1 month")|date("n")}) }}">&gt; Poprzedni
+                miesiąc</a>
+        </div>
+        <div id="currentMonth">
+            <h2>{{ currentMonthYear|date("m / Y (M)") }}</h2>
+        </div>
+        <div id="nextMonth">
+            <a href="{{ path('mainView',{'year': currentMonthYear|date_modify("+1 month")|date("Y") ,'month': currentMonthYear|date_modify("+1 month")|date("n")}) }}">Następny
+                miesiąc &lt;</a>
+        </div>
     </div>
-    <div id="currentMonth">
-        <b>{{ currentMonthYear|date("m / Y (M)") }}</b>
-    </div>
-    <div id="nextMonth">
-        <a href="{{ path('mainView',{'year': currentMonthYear|date_modify("+1 month")|date("Y") ,'month': currentMonthYear|date_modify("+1 month")|date("n")}) }}">Następny
-            miesiąc</a>
-    </div>
-</div>
-<div id="content">
-    <table>
-        <tr>
-            <td>Nazwisko i imię</td>
-            {% for d in 1..daysInMonth %}
-                <td>{{ d }}</td>
-            {% endfor %}
-        </tr>
-        {% for student in students %}
+    <div id="content">
+        <table>
             <tr>
-                <td>{{ student.surname }} {{ student.name }}</td>
+                <th>Nazwisko i imię</th>
                 {% for d in 1..daysInMonth %}
-                    {% set emptyCell = 1 %}
-                    {% for ss in studentStatus %}
-                        {% if (student.id == ss.idstudent.id) and (ss.eventDate|date('Y-m-d') == (currentMonthYear ~ '-' ~ d)|date('Y-m-d')) %}
-                            {% set emptyCell = 0 %}
-                            <td>
-                                <a href="{{ path('changeStatus',{'student':student.id,'date':(currentMonthYear ~ '-' ~ d)|date('Y-m-d')}) }}">
-                                    {{ ss.status }}
-                                </a>
+                    <th>{{ d }}</th>
+                {% endfor %}
+            </tr>
+            {% for student in students %}
+                <tr>
+                    <td class="names">{{ student.surname }} {{ student.name }}</td>
+                    {% for d in 1..daysInMonth %}
+                        {% set emptyCell = 1 %}
+                        {% for ss in studentStatus %}
+                            {% if (student.id == ss.idstudent.id) and (ss.eventDate|date('Y-m-d') == (currentMonthYear ~ '-' ~ d)|date('Y-m-d')) %}
+                                {% set emptyCell = 0 %}
+                                <td class="days">
+                                    <a href="{{ path('changeStatus',{'student':student.id,'date':(currentMonthYear ~ '-' ~ d)|date('Y-m-d')}) }}">
+                                        {{ ss.status }}
+                                    </a>
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                        {% if emptyCell == 1 %}
+                            <td class="days d-{{ d }}">
+                                <a href="{{ path('changeStatus',{'student':student.id,'date':(currentMonthYear ~ '-' ~ d)|date('Y-m-d')}) }}">&nbsp;</a>
                             </td>
                         {% endif %}
                     {% endfor %}
-                    {% if emptyCell == 1 %}
-                        <td>
-                            <a href="{{ path('changeStatus',{'student':student.id,'date':(currentMonthYear ~ '-' ~ d)|date('Y-m-d')}) }}">&nbsp;</a>
-                        </td>
-                    {% endif %}
-                {% endfor %}
-            </tr>
-        {% endfor %}
-    </table>
-</div>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock %}
