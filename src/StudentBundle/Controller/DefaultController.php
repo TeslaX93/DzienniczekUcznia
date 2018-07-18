@@ -68,12 +68,14 @@ class DefaultController extends Controller
     public function quickChangeStudentStatus($student, $date)
     {
 
-        $availableStatus = [' ','O','N','S'];
+        $availableStatus = [' ', 'O', 'N', 'S'];
 
         $em = $this->getDoctrine()->getManager();
         $ss = $em->getRepository('StudentBundle:StudentStatus');
-        $st = $em->getRepository('StudentBundle:Student')->findOneBy(['id'=>$student]);
-        if(!$st) {throw $this->createNotFoundException("Nie znaleziono ucznia o podanym ID");}
+        $st = $em->getRepository('StudentBundle:Student')->findOneBy(['id' => $student]);
+        if (!$st) {
+            throw $this->createNotFoundException("Nie znaleziono ucznia o podanym ID");
+        }
         $studentStatus = $ss->findOneBy(['studentId' => $st, 'eventDate' => new \DateTime($date)]);
         if (!$studentStatus) {
             $studentStatus = new StudentStatus();
@@ -82,8 +84,8 @@ class DefaultController extends Controller
             $studentStatus->setStatus($availableStatus[1]);
         } else {
             $currentStatus = $studentStatus->getStatus();
-            $currentStatus = array_search($currentStatus,$availableStatus);
-            $studentStatus->setStatus($availableStatus[($currentStatus+1) % (count($availableStatus)-1)]);
+            $currentStatus = array_search($currentStatus, $availableStatus);
+            $studentStatus->setStatus($availableStatus[($currentStatus + 1) % (count($availableStatus))]);
         }
         $em->persist($studentStatus);
         $em->flush();

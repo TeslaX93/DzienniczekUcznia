@@ -1,3 +1,6 @@
+{% extends 'base.html.twig' %}
+{% block title %}DzienniczekUcznia{% endblock %}
+{% block stylesheets %}
 <style type="text/css">
     td a {
         display: block;
@@ -28,6 +31,8 @@
         text-align: center;
     }
 </style>
+{% endblock %}
+{% block body %}
 {% set currentMonthYear %}{{ app.request.get('year') }}-{{ app.request.get('month') }}{% endset %}
 {% set daysInMonth=currentMonthYear|date("t") %}
 <div id="navbar">
@@ -76,3 +81,4 @@
         {% endfor %}
     </table>
 </div>
+{% endblock %}
